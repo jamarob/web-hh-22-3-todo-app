@@ -13,8 +13,9 @@ const enclosingHandler = async (request,response) => {
     }
 
     if(method === "POST") {
-        // TODO: create a new todo from request body
-        return response.status(200).send("handling post /todos")
+        const todoToCreate = request.body
+        const createdTodo = await Todo.create(todoToCreate)
+        return response.status(200).json(createdTodo)
     }
 
     response.status(405).send()
