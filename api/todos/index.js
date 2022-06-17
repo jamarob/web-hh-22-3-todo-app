@@ -1,10 +1,15 @@
-const enclosingHandler = (request,response) => {
+import connectToMongodb from "../../src/api/db/connect-to-mongodb"
+import Todo from "../../src/api/model/Todo"
+
+const enclosingHandler = async (request,response) => {
+
+    await connectToMongodb()
 
     const {method} = request
 
     if(method === "GET") {
-        // TODO: find all todos
-        return response.status(200).send("handling get /todos")
+        const allTodos = await Todo.find()
+        return response.status(200).json(allTodos)
     }
 
     if(method === "POST") {
