@@ -1,7 +1,8 @@
 @host = http://localhost:3000
 @todoid = 62aaee8b4600b98bf567f7aa
 
-### get all todos
+
+### Get all todos
 GET {{host}}/api/todos
 
 ### create a new todo

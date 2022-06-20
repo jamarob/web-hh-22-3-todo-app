@@ -1,19 +1,22 @@
-import mongoose from "mongoose"
+import mongoose from 'mongoose'
 
-const {Schema, model} = mongoose
+const { Schema, model } = mongoose
 
-const todoSchema = new Schema({
+const todoSchema = new Schema(
+  {
     description: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     done: {
-        type: Boolean,
-        required: true
-    }
-},{
+      type: Boolean,
+      required: true,
+    },
+  },
+  {
     timestamps: true,
-    versionKey: false
-})
+    versionKey: false,
+  }
+)
 
-export default model("Todo", todoSchema)
+export default model('Todo', todoSchema)

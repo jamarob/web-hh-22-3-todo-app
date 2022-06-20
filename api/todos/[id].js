@@ -1,30 +1,50 @@
-const enclosedHandler = (request,response) => {
+const enclosedHandler = async (request, response) => {
+  await connectToMongodb()
 
-    const {id} = request.query
+  const { id } = request.query
 
-    const {method} = request
+  const { method } = request
 
-    if(method === "GET") {
-        // TODO: find a todo by id
-        return response.status(200).json(`handling get /todos/${id} `)
+  if (method === 'GET') {
+    const foundTodo = await Todo.findById(id)
+    if (!foundTodo) {
+      return response.status(404).send()
     }
+    return response.status(200).json(foundTodo)
+  }
 
-    if(method === "DELETE") {
-        // TODO: delete a todo by id
-        return response.status(200).json(`handling delete /todos/${id} `)
+  if (method === 'DELETE') {
+    const updatedTodo = await Todo.findByIdAndUpdate(id, request.body, {
+      new: true,
+    })
+    if (!updatedTodo) {
+      return response.status(404).send()
     }
+    return response.status(200).json(updatedTodo)
+  }
 
-    if(method === "PUT") {
-        // TODO: find and update a todo by id
-        return response.status(200).json(`handling put /todos/${id} `)
+  if (method === 'PUT') {
+    const todoToUpdate = await Todo.findById(id)
+    if (!todoToUpdate) {
+      return response.status(404).send()
     }
+    todoToUpdate.description = request.body.description
+    todoToUpdate.done = request.body.done
+    const updatedTodo = await todoToUpdate.save()
+    return response.status(200).json(updatedTodo)
+  }
 
-    if(method === "PATCH") {
-        // TODO: find and (partially) update a todo by id
-        return response.status(200).json(`handling patch /todos/${id} `)
+  if (method === 'PATCH') {
+    const updatedTodo = await Todo.findByIdAndUpdate(id, request.body, {
+      new: true,
+    })
+    if (!updatedTodo) {
+      return response.status(404).send()
     }
+    return response.status(200).json(updatedTodo)
+  }
 
-    response.status(405).send()
+  response.status(405).send()
 }
 
 export default enclosedHandler
